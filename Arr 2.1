@@ -1,0 +1,70 @@
+using System;
+
+namespace ConsoleApp__Arr_2._1_
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введіть елементи масиву через пробіл:");
+            string input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Масив не може бути порожнім. Спробуйте ще раз.");
+                Console.ReadLine();
+                return;
+            }
+
+            // Конвертуємо введення у масив цілих чисел
+            string[] inputArray = input.Split(' ');
+            int[] numbers;
+            try
+            {
+                numbers = Array.ConvertAll(inputArray, int.Parse);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Усі елементи повинні бути цілими числами.");
+                Console.ReadLine();
+                return;
+            }
+
+            if (numbers.Length < 2)
+            {
+                Console.WriteLine("Масив повинен містити щонайменше 2 елементи.");
+                Console.ReadLine();
+                return;
+            }
+
+            // Знаходимо другий найбільший елемент
+            int largest = int.MinValue;
+            int secondLargest = int.MinValue;
+
+            foreach (int number in numbers)
+            {
+                if (number > largest)
+                {
+                    secondLargest = largest;
+                    largest = number;
+                }
+                else if (number > secondLargest && number < largest)
+                {
+                    secondLargest = number;
+                }
+            }
+
+            if (secondLargest == int.MinValue)
+            {
+                Console.WriteLine("Другого найбільшого елемента не існує (усі елементи однакові).");
+            }
+            else
+            {
+                Console.WriteLine($"Другий найбільший елемент масиву: {secondLargest}");
+            }
+
+            // Чекаємо, поки користувач натисне клавішу
+            Console.ReadLine();
+        }
+    }
+}
