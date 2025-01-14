@@ -1,0 +1,99 @@
+using System;
+
+namespace SumDiagonals
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введіть розмірність квадратного масиву (N x N):");
+            if (!int.TryParse(Console.ReadLine(), out int size) || size <= 0)
+            {
+                Console.WriteLine("Некоректне значення розміру. Має бути ціле число більше 0.");
+                Console.ReadLine();
+                return;
+            }
+
+            int[,] array = new int[size, size];
+            Console.WriteLine($"Введіть елементи {size} x {size} масиву (кожен рядок на новому рядку):");
+
+            for (int i = 0; i < size; i++)
+            {
+                string[] inputRow = Console.ReadLine()?.Split(' ');
+
+                if (inputRow == null || inputRow.Length != size)
+                {
+                    Console.WriteLine("Кількість елементів у рядку повинна відповідати розміру масиву.");
+                    Console.ReadLine();
+                    return;
+                }
+
+                try
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        array[i, j] = int.Parse(inputRow[j]);
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Усі елементи повинні бути цілими числами.");
+                    Console.ReadLine();
+                    return;
+                }
+            }
+
+            Console.WriteLine("Ваш масив:");
+            PrintArray(array);
+
+            int mainDiagonalSum = CalculateMainDiagonalSum(array);
+            int secondaryDiagonalSum = CalculateSecondaryDiagonalSum(array);
+
+            Console.WriteLine($"Сума елементів головної діагоналі: {mainDiagonalSum}");
+            Console.WriteLine($"Сума елементів побічної діагоналі: {secondaryDiagonalSum}");
+
+            Console.ReadLine();
+        }
+
+        static int CalculateMainDiagonalSum(int[,] array)
+        {
+            int size = array.GetLength(0);
+            int sum = 0;
+
+            for (int i = 0; i < size; i++)
+            {
+                sum += array[i, i];
+            }
+
+            return sum;
+        }
+
+        static int CalculateSecondaryDiagonalSum(int[,] array)
+        {
+            int size = array.GetLength(0);
+            int sum = 0;
+
+            for (int i = 0; i < size; i++)
+            {
+                sum += array[i, size - 1 - i];
+            }
+
+            return sum;
+        }
+
+        static void PrintArray(int[,] array)
+        {
+            int rows = array.GetLength(0);
+            int cols = array.GetLength(1);
+            
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    Console.Write($"{array[i, j]} ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
