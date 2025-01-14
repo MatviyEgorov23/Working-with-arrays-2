@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp__Arr_2._3_
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введіть елементи масиву через пробіл:");
+            string[] input = Console.ReadLine()?.Split(' ');
+
+            if (input == null || input.Length == 0)
+            {
+                Console.WriteLine("Масив не може бути порожнім.");
+                Console.ReadLine();
+                return;
+            }
+
+            int[] array;
+            try
+            {
+                array = Array.ConvertAll(input, int.Parse);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Усі елементи повинні бути цілими числами.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine("Введіть індекс елемента, який потрібно видалити:");
+            if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index >= array.Length)
+            {
+                Console.WriteLine("Вказано некоректний індекс.");
+                Console.ReadLine();
+                return;
+            }
+
+            array = RemoveElement(array, index);
+
+            Console.WriteLine("Масив після видалення елемента:");
+            Console.WriteLine(string.Join(" ", array));
+
+            Console.ReadLine();
+        }
+
+        static int[] RemoveElement(int[] array, int index)
+        {
+            int[] newArray = new int[array.Length - 1];
+            int newIndex = 0;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (i == index) continue;
+                newArray[newIndex++] = array[i];
+            }
+
+            return newArray;
+        }
+    }
+}
