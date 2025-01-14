@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp__Arr_2._2_
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введіть розмірність масиву (рядки і стовпці) через пробіл:");
+            string[] dimensions = Console.ReadLine()?.Split(' ');
+
+            if (dimensions == null || dimensions.Length != 2 ||
+                !int.TryParse(dimensions[0], out int rows) ||
+                !int.TryParse(dimensions[1], out int cols) || rows <= 0 || cols <= 0)
+            {
+                Console.WriteLine("Некоректні розміри масиву.");
+                Console.ReadLine();
+                return;
+            }
+
+            int[,] array = new int[rows, cols];
+            Console.WriteLine("Введіть елементи масиву (по одному на рядок):");
+
+            for (int i = 0; i < rows; i++)
+            {
+                string[] inputRow = Console.ReadLine()?.Split(' ');
+                if (inputRow == null || inputRow.Length != cols)
+                {
+                    Console.WriteLine("Некоректна кількість елементів у рядку.");
+                    Console.ReadLine();
+                    return;
+                }
+
+                try
+                {
+                    for (int j = 0; j < cols; j++)
+                    {
+                        array[i, j] = int.Parse(inputRow[j]);
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Усі елементи повинні бути цілими числами.");
+                    Console.ReadLine();
+                    return;
+                }
+            }
+
+            Console.WriteLine("Початковий масив:");
+            PrintArray(array);
+
+            // Сортування
+            Sort2DArray(array);
+
+            Console.WriteLine("Відсортований масив за зростанням:");
+            PrintArray(array);
+
+            Console.ReadLine();
+        }
+
+        static void Sort2DArray(int[,] array)
+        {
+            int rows = array.GetLength(0);
+            int cols = array.GetLength(1);
+
+            // Зведення 2D масиву в 1D масив
+            int[] tempArray = new int[rows * cols];
+            int index = 0;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    tempArray[index++] = array[i, j];
+                }
+            }
+
+            // Сортування 1D масиву
+            Array.Sort(tempArray);
+
+            // Зворотне перетворення у 2D масив
+            index = 0;
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    array[i, j] = tempArray[index++];
+                }
+            }
+        }
+
+        static void PrintArray(int[,] array)
+        {
+            int rows = array.GetLength(0);
+            int cols = array.GetLength(1);
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    Console.Write($"{array[i, j]} ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
